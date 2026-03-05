@@ -1,0 +1,21 @@
+# Nextflow
+work/
+.nextflow/
+.nextflow.log*
+
+# Results
+results/
+test_results/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+
+# Params files (contain local paths)
+params.yaml
+params.json
+
+# macOS
+.DS_Store
