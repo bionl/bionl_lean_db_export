@@ -23,12 +23,12 @@ include { CONVERT_THRESHOLDS  } from './modules/thresholds_to_coverage'
 // ─────────────────────────────────────────────
 //  Helper: assert a required param is set
 // ─────────────────────────────────────────────
-def requireParam(String name) {
-    if (params[name] == null) {
-        error "Required parameter '--${name}' is not set. See README for usage."
-    }
-    return file(params[name], checkIfExists: true)
-}
+//def requireParam(String name) {
+//    if (params[name] == null) {
+//        error "Required parameter '--${name}' is not set. See README for usage."
+//    }
+//    return file(params[name], checkIfExists: true)
+//}
 
 // ─────────────────────────────────────────────
 //  Workflow
@@ -43,22 +43,22 @@ workflow {
     }
 
     ch_bins_bed           = Channel.value(file(params.bins_bed,             checkIfExists: true))
-    ch_vep_cache          = Channel.value(requireParam('vep_cache'))
-    ch_vep_fasta          = Channel.value(requireParam('vep_fasta'))
-    ch_vep_fasta_fai      = Channel.value(requireParam('vep_fasta_fai'))
-    ch_vep_plugins        = Channel.value(requireParam('vep_plugins'))
-    ch_revel_vcf          = Channel.value(requireParam('revel_vcf'))
-    ch_revel_vcf_tbi      = Channel.value(requireParam('revel_vcf_tbi'))
-    ch_alpha_vcf          = Channel.value(requireParam('alpha_missense_vcf'))
-    ch_alpha_vcf_tbi      = Channel.value(requireParam('alpha_missense_vcf_tbi'))
-    ch_clinvar_vcf        = Channel.value(requireParam('clinvar_vcf'))
-    ch_clinvar_vcf_tbi    = Channel.value(requireParam('clinvar_vcf_tbi'))
-    ch_spliceai_snv       = Channel.value(requireParam('spliceai_snv_vcf'))
-    ch_spliceai_snv_tbi   = Channel.value(requireParam('spliceai_snv_vcf_tbi'))
-    ch_spliceai_indel     = Channel.value(requireParam('spliceai_indel_vcf'))
-    ch_spliceai_indel_tbi = Channel.value(requireParam('spliceai_indel_vcf_tbi'))
-    ch_bayesdel_vcf       = Channel.value(requireParam('bayesdel_vcf'))
-    ch_bayesdel_vcf_tbi   = Channel.value(requireParam('bayesdel_vcf_tbi'))
+    ch_vep_cache          = Channel.value(file(params.vep_cache,          checkIfExists: true))
+    ch_vep_fasta          = Channel.value(file(params.vep_fasta,          checkIfExists: true))
+    ch_vep_fasta_fai      = Channel.value(file(params.vep_fasta_fai,      checkIfExists: true))
+    ch_vep_plugins        = Channel.value(file(params.vep_plugins,        checkIfExists: true))
+    ch_revel_vcf          = Channel.value(file(params.revel_vcf,          checkIfExists: true))
+    ch_revel_vcf_tbi      = Channel.value(file(params.revel_vcf_tbi,      checkIfExists: true))
+    ch_alpha_vcf          = Channel.value(file(params.alpha_missense_vcf, checkIfExists: true))
+    ch_alpha_vcf_tbi      = Channel.value(file(params.alpha_missense_vcf_tbi, checkIfExists: true))
+    ch_clinvar_vcf        = Channel.value(file(params.clinvar_vcf,        checkIfExists: true))
+    ch_clinvar_vcf_tbi    = Channel.value(file(params.clinvar_vcf_tbi,    checkIfExists: true))
+    ch_spliceai_snv       = Channel.value(file(params.spliceai_snv_vcf,   checkIfExists: true))
+    ch_spliceai_snv_tbi   = Channel.value(file(params.spliceai_snv_vcf_tbi, checkIfExists: true))
+    ch_spliceai_indel     = Channel.value(file(params.spliceai_indel_vcf, checkIfExists: true))
+    ch_spliceai_indel_tbi = Channel.value(file(params.spliceai_indel_vcf_tbi, checkIfExists: true))
+    ch_bayesdel_vcf       = Channel.value(file(params.bayesdel_vcf,       checkIfExists: true))
+    ch_bayesdel_vcf_tbi   = Channel.value(file(params.bayesdel_vcf_tbi,   checkIfExists: true))
 
     // ── Parse samplesheet ─────────────────────────────────────────────────────
     ch_samples = Channel
