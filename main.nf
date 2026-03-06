@@ -46,7 +46,7 @@ workflow {
     ch_vep_cache          = Channel.value(file(params.vep_cache,          checkIfExists: true))
     ch_vep_fasta          = Channel.value(file(params.vep_fasta,          checkIfExists: true))
     ch_vep_fasta_fai      = Channel.value(file(params.vep_fasta_fai,      checkIfExists: true))
-    ch_vep_plugins        = Channel.value(file(params.vep_plugins,        checkIfExists: true))
+    ch_vep_plugins        = Channel.value(file(params.vep_plugins,        checkIfExists: false))
     ch_revel_vcf          = Channel.value(file(params.revel_vcf,          checkIfExists: true))
     ch_revel_vcf_tbi      = Channel.value(file(params.revel_vcf_tbi,      checkIfExists: true))
     ch_alpha_vcf          = Channel.value(file(params.alpha_missense_vcf, checkIfExists: true))
