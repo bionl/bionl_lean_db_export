@@ -5,33 +5,12 @@ nextflow.enable.dsl = 2
 // ─────────────────────────────────────────────
 //  Parameter defaults
 // ─────────────────────────────────────────────
-params.samplesheet          = "samplesheet.tsv"
-params.outdir               = "results"
-params.threads              = 4
+params.samplesheet          = params.samplesheet ?: "${workflow.projectDir}/data/samplesheet.tsv"
+params.outdir               = params.outdir ?: params.outdir
 params.mosdepth_thresholds  = "10,20,30"
 
 // ── Shared reference / annotation resources ───────────────────────────────────
-params.bins_bed             = "MANE_bins_unique.bed"
-
-// ── VEP resources (all required) ─────────────────────────────────────────────
-params.vep_cache            = /home/alkhatib/vep_data/cache   
-params.vep_fasta            = /home/alkhatib/vep_data/Homo_sapiens.GRCh38.dna.toplevel.fa   
-params.vep_fasta_fai        = /home/alkhatib/vep_data/Homo_sapiens.GRCh38.dna.toplevel.fa.fai  
-params.vep_plugins          = /home/alkhatib/vep_plugins/
-
-// ── VEP custom / plugin annotation files ─────────────────────────────────────
-params.revel_vcf            = /home/alkhatib/vep_data/new_tabbed_revel_grch38.tsv.gz
-params.revel_vcf_tbi        = /home/alkhatib/vep_data/new_tabbed_revel_grch38.tsv.gz.tbi
-params.alpha_missense_vcf   = /home/alkhatib/vep_data/AlphaMissense_hg38.tsv.gz
-params.alpha_missense_vcf_tbi = /home/alkhatib/vep_data/AlphaMissense_hg38.tsv.gz.tbi
-params.clinvar_vcf          = /home/alkhatib/vep_data/ClinVar/clinvar.chr.vcf.gz
-params.clinvar_vcf_tbi      = /home/alkhatib/vep_data/ClinVar/clinvar.chr.vcf.gz.tbi
-//params.spliceai_snv_vcf     = /home/alkhatib/vep_data/SpliceAI_hg38.tsv.gz
-//params.spliceai_snv_vcf_tbi = /home/alkhatib/vep_data/SpliceAI_hg38.tsv.gz.tbi
-//params.spliceai_indel_vcf   = /home/alkhatib/vep_data/SpliceAI_hg38.tsv.gz
-//params.spliceai_indel_vcf_tbi = /home/alkhatib/vep_data/SpliceAI_hg38.tsv.gz.tbi
-//params.bayesdel_vcf         = /home/alkhatib/vep_data/BayesDel_hg38.tsv.gz
-//params.bayesdel_vcf_tbi     = /home/alkhatib/vep_data/BayesDel_hg38.tsv.gz.tbi
+params.bins_bed             = params.bins_bed ?: "${workflow.projectDir}/data/MANE_bins_unique.bed"
 
 // ─────────────────────────────────────────────
 //  Module imports
@@ -56,7 +35,6 @@ def requireParam(String name) {
 // ─────────────────────────────────────────────
 workflow {
 
-    // ── Validate core inputs ──────────────────────────────────────────────────
     if (!file(params.samplesheet).exists()) {
         error "Samplesheet not found: ${params.samplesheet}"
     }
@@ -64,8 +42,6 @@ workflow {
         error "BED file not found: ${params.bins_bed}"
     }
 
-    // ── Resolve shared reference / annotation files as value channels ─────────
-    // Value channels broadcast to every sample without being consumed.
     ch_bins_bed           = Channel.value(file(params.bins_bed,             checkIfExists: true))
     ch_vep_cache          = Channel.value(requireParam('vep_cache'))
     ch_vep_fasta          = Channel.value(requireParam('vep_fasta'))
@@ -77,17 +53,14 @@ workflow {
     ch_alpha_vcf_tbi      = Channel.value(requireParam('alpha_missense_vcf_tbi'))
     ch_clinvar_vcf        = Channel.value(requireParam('clinvar_vcf'))
     ch_clinvar_vcf_tbi    = Channel.value(requireParam('clinvar_vcf_tbi'))
-    //ch_spliceai_snv       = Channel.value(requireParam('spliceai_snv_vcf'))
-    //ch_spliceai_snv_tbi   = Channel.value(requireParam('spliceai_snv_vcf_tbi'))
-    //ch_spliceai_indel     = Channel.value(requireParam('spliceai_indel_vcf'))
-    //ch_spliceai_indel_tbi = Channel.value(requireParam('spliceai_indel_vcf_tbi'))
-    //ch_bayesdel_vcf       = Channel.value(requireParam('bayesdel_vcf'))
-    //ch_bayesdel_vcf_tbi   = Channel.value(requireParam('bayesdel_vcf_tbi'))
+    ch_spliceai_snv       = Channel.value(requireParam('spliceai_snv_vcf'))
+    ch_spliceai_snv_tbi   = Channel.value(requireParam('spliceai_snv_vcf_tbi'))
+    ch_spliceai_indel     = Channel.value(requireParam('spliceai_indel_vcf'))
+    ch_spliceai_indel_tbi = Channel.value(requireParam('spliceai_indel_vcf_tbi'))
+    ch_bayesdel_vcf       = Channel.value(requireParam('bayesdel_vcf'))
+    ch_bayesdel_vcf_tbi   = Channel.value(requireParam('bayesdel_vcf_tbi'))
 
     // ── Parse samplesheet ─────────────────────────────────────────────────────
-    // Columns: sample, assay, vcf, bam, bam_index
-    // The input VCF is the raw/consensus VCF — no pre-existing index needed.
-    // VEP produces the annotated output consumed by EXTRACT_VARIANTS.
     ch_samples = Channel
         .fromPath(params.samplesheet)
         .splitCsv(header: true, sep: '\t')
@@ -114,12 +87,12 @@ workflow {
         ch_alpha_vcf_tbi,
         ch_clinvar_vcf,
         ch_clinvar_vcf_tbi,
-        //ch_spliceai_snv,
-        //ch_spliceai_snv_tbi,
-        //ch_spliceai_indel,
-        //ch_spliceai_indel_tbi,
-        //ch_bayesdel_vcf,
-        //ch_bayesdel_vcf_tbi,
+        ch_spliceai_snv,
+        ch_spliceai_snv_tbi,
+        ch_spliceai_indel,
+        ch_spliceai_indel_tbi,
+        ch_bayesdel_vcf,
+        ch_bayesdel_vcf_tbi,
         ch_vep_plugins
     )
 

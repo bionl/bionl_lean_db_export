@@ -26,7 +26,7 @@ process EXTRACT_VARIANTS {
     def sample = meta.sample
     def assay  = meta.assay
     """
-    python ${projectDir}/bin/extract_variants.py \\
+    python ${projectDir}/scripts/db_vep_vcf_to_variants_all.py \\
         --sample  "${sample}" \\
         --assay   "${assay}"  \\
         --vcf     "${vcf}"

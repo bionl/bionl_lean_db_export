@@ -8,7 +8,7 @@
 process MOSDEPTH_THRESHOLDS {
 
     tag "${meta.sample} | ${meta.assay}"
-    label 'med_cpu'
+    label 'high_cpu'
 
     publishDir(
         path:    "${params.outdir}/mosdepth/${meta.sample}",

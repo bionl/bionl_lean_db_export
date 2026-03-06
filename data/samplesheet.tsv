@@ -1,0 +1,2 @@
+sample	assay	vcf	bam	bam_index
+Patient_1	WES	/home/alkhatib/bionl_lean_db_export/data/HG003_sample.vaf_added.vcf.gz	/home/alkhatib/bionl_lean_db_export/data/HG003_sample.bed_filtered.bam	/home/alkhatib/bionl_lean_db_export/data/HG003_sample.bed_filtered.bam.bai

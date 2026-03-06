@@ -1,0 +1,43 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/Bionl/bionl_lean_db_export/dev/nextflow_schema.json",
+    "title": "bionl_lean_db_export pipeline parameters",
+    "description": "Generates database-ready variants and coverage tables from consensus VCFs and BAMs.",
+    "type": "object",
+  
+    "$defs": {
+  
+      "io_options": {
+        "title": "Input / Output",
+        "type": "object",
+        "fa_icon": "fas fa-folder-open",
+        "properties": {
+  
+          "samplesheet": {
+            "type": "string",
+            "title": "Samplesheet TSV",
+            "description": "Tab-separated file with columns: sample, assay, vcf, bam, bam_index.",
+            "format": "file-path",
+            "pattern": "^\\S+\\.tsv$"
+          },
+  
+          "outdir": {
+            "type": "string",
+            "title": "Output directory",
+            "description": "Directory where all pipeline results will be written.",
+            "format": "directory-path"
+          }
+  
+        },
+        "required": ["samplesheet", "outdir"]
+      }
+  
+    },
+  
+    "allOf": [
+      { "$ref": "#/$defs/io_options" }
+    ],
+  
+    "required": ["samplesheet", "outdir"],
+    "additionalProperties": true
+  }

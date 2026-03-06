@@ -26,7 +26,7 @@ process CONVERT_THRESHOLDS {
     def sample = meta.sample
     def assay  = meta.assay
     """
-    python ${projectDir}/bin/db_depth_to_coverage_new.py \\
+    python ${projectDir}/scripts/db_depth_to_coverage_new.py \\
         --infile  "${thresholds_bed}" \\
         --assay   "${assay}"          \\
         --sample  "${sample}"
