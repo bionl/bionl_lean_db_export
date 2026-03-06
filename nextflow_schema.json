@@ -20,7 +20,13 @@
             "format": "file-path",
             "pattern": "^\\S+\\.tsv$"
           },
-  
+          "bins_bed": {
+            "type": "string",
+            "title": "BED file",
+            "description": "BED file containing the genomic bins.",
+            "format": "file-path",
+            "pattern": "^\\S+\\.bed$"
+          },
           "outdir": {
             "type": "string",
             "title": "Output directory",
@@ -29,7 +35,7 @@
           }
   
         },
-        "required": ["samplesheet", "outdir"]
+        "required": ["samplesheet", "bins_bed", "outdir"]
       }
   
     },
@@ -38,6 +44,6 @@
       { "$ref": "#/$defs/io_options" }
     ],
   
-    "required": ["samplesheet", "outdir"],
+    "required": ["samplesheet", "bins_bed", "outdir"],
     "additionalProperties": true
   }
