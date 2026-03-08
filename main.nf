@@ -8,7 +8,7 @@ nextflow.enable.dsl = 2
 params.samplesheet          = params.samplesheet ?: "${workflow.projectDir}/data/samplesheet.tsv"
 params.outdir               = params.outdir ?: params.outdir
 params.mosdepth_thresholds  = "10,20,30"
-params.script_dir           = params.script_dir ?: "${workflow.projectDir}/scripts"
+params.script_dir           = params.script_dir ?: "${workflow.projectDir}/bins"
 
 // ── Shared reference / annotation resources ───────────────────────────────────
 params.bins_bed             = params.bins_bed ?: "${workflow.projectDir}/data/MANE_bins_unique.bed"
