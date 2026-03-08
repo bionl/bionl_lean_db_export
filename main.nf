@@ -96,9 +96,9 @@ workflow {
         ch_bayesdel_vcf_tbi,
         ch_vep_plugins
     )
-
     // ── Step 2: Extract variants from VEP-annotated VCF ───────────────────────
-    EXTRACT_VARIANTS(VEP_ANNOTATE.out.vep_vcf)
+    ch_variants_script = Channel.value(file("${params.script_dir}/db_vep_vcf_to_variants_all.py"))
+    EXTRACT_VARIANTS(VEP_ANNOTATE.out.vep_vcf, ch_variants_script)
 
     // ── Step 3: BAM coverage (runs in parallel with VEP/extraction) ───────────
     ch_bam_input = ch_samples.map { meta, vcf, bam, bam_index -> [ meta, bam, bam_index ] }
@@ -106,7 +106,8 @@ workflow {
     MOSDEPTH_THRESHOLDS(ch_bam_input, ch_bins_bed)
 
     // ── Step 4: Convert mosdepth thresholds to coverage TSV ──────────────────
-    CONVERT_THRESHOLDS(MOSDEPTH_THRESHOLDS.out.regions_bed)
+    ch_coverage_script = Channel.value(file("${params.script_dir}/db_depth_to_coverage_new.py"))
+    CONVERT_THRESHOLDS(MOSDEPTH_THRESHOLDS.out.regions_bed, ch_coverage_script)
 }
 
 // ─────────────────────────────────────────────

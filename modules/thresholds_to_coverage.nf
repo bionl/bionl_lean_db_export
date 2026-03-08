@@ -18,7 +18,7 @@ process CONVERT_THRESHOLDS {
 
     input:
     tuple val(meta), path(regions_bed)
-
+    path coverage_script
     output:
     tuple val(meta), path("${meta.sample}_${meta.assay}_coverage.tsv"), emit: coverage_tsv
 
@@ -26,10 +26,10 @@ process CONVERT_THRESHOLDS {
     def sample = meta.sample
     def assay  = meta.assay
     """
-    db_depth_to_coverage_new.py \\
+    ${coverage_script} \\
         --regions_file "${regions_bed}" \\
-        --assay   "${assay}"          \\
-        --sample  "${sample}"
+        --sample  "${sample}" \\
+        --assay   "${assay}"
     """
 
     stub:
