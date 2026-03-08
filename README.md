@@ -40,14 +40,16 @@ The BAM coverage branch runs **in parallel** with the VEP/extraction branch.
 repo/
 ├── main.nf                          # Pipeline entry point
 ├── nextflow.config                  # Parameters, profiles, resource labels
-├── samplesheet.tsv                  # Sample manifest (edit before running)
+├── data/
+│   ├── samplesheet.tsv              
+│   ├── MANE_uniques_bins.bed              
 ├── modules/
 │   ├── vep_annotate.nf              # VEP_ANNOTATE process
 │   ├── extract_variants.nf          # EXTRACT_VARIANTS process
 │   ├── mosdepth_thresholds.nf       # MOSDEPTH_THRESHOLDS process
 │   └── thresholds_to_coverage.nf    # CONVERT_THRESHOLDS process
-└── bin/
-    ├── extract_variants.py          # VEP VCF → variants TSV
+└── bins/
+    ├── db_vep_vcf_to_variants_all.py    # VEP VCF → variants TSV
     └── db_depth_to_coverage_new.py  # mosdepth BED → coverage TSV
 ```
 

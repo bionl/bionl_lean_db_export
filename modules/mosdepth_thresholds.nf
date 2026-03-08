@@ -10,11 +10,6 @@ process MOSDEPTH_THRESHOLDS {
     tag "${meta.sample} | ${meta.assay}"
     label 'high_cpu'
 
-    publishDir(
-        path:    "${params.outdir}/mosdepth/${meta.sample}",
-        mode:    'copy',
-        pattern: '*.{gz,gz.csi,summary.txt}'
-    )
 
     input:
     tuple val(meta), path(bam), path(bam_index)
@@ -27,12 +22,10 @@ process MOSDEPTH_THRESHOLDS {
 
     script:
     def sample     = meta.sample
-    def thresholds = params.mosdepth_thresholds
     def threads    = task.cpus
     """
     mosdepth \\
         --by         "${bins_bed}" \\
-        --thresholds "${thresholds}" \\
         --no-per-base \\
         --fast-mode \\
         --threads    "${threads}" \\
