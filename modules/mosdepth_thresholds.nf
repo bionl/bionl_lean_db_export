@@ -9,7 +9,12 @@ process MOSDEPTH_THRESHOLDS {
 
     tag "${meta.sample} | ${meta.assay}"
     label 'high_cpu'
-
+    
+    publishDir(
+        path:    "${params.outdir}/${meta.sample}/mosdepth",
+        mode:    'copy',
+        pattern: '*.{bed.gz,bed.gz.csi,summary.txt}'
+    )
 
     input:
     tuple val(meta), path(bam), path(bam_index)
