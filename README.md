@@ -107,7 +107,6 @@ Patient_1 WES    /data/Patient_1/consensus.vcf.gz     /data/Patient_1/s.bam /dat
 | `--bayesdel_vcf`            | BayesDel scores VCF                              |
 | `--bayesdel_vcf_tbi`        | BayesDel VCF index                               |
 
-> **Tip:** With many annotation files, use a params YAML/JSON file (`-params-file`) rather than listing every `--flag` on the command line.
 
 ---
 
