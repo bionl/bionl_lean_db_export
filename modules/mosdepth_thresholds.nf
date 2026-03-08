@@ -2,7 +2,7 @@
 //  modules/mosdepth_thresholds.nf
 //  Process: MOSDEPTH_THRESHOLDS
 //  Input  : BAM + index, MANE bins BED file
-//  Output : sample.thresholds.bed.gz (+ .tbi)
+//  Output : sample.regions.bed.gz (+ .tbi)
 // ─────────────────────────────────────────────────────────────────────────────
 
 process MOSDEPTH_THRESHOLDS {
@@ -21,8 +21,8 @@ process MOSDEPTH_THRESHOLDS {
     path  bins_bed
 
     output:
-    tuple val(meta), path("${meta.sample}.thresholds.bed.gz"),        emit: thresholds_bed
-    tuple val(meta), path("${meta.sample}.thresholds.bed.gz.csi"),    emit: thresholds_index  , optional: true
+    tuple val(meta), path("${meta.sample}.regions.bed.gz"),    emit: regions_bed
+    tuple val(meta), path("${meta.sample}.regions.bed.gz.csi"),    emit: regions_index
     tuple val(meta), path("${meta.sample}.mosdepth.summary.txt"),     emit: summary
 
     script:
@@ -42,8 +42,8 @@ process MOSDEPTH_THRESHOLDS {
 
     stub:
     """
-    touch ${meta.sample}.thresholds.bed.gz
-    touch ${meta.sample}.thresholds.bed.gz.csi
+    touch ${meta.sample}.regions.bed.gz
+    touch ${meta.sample}.regions.bed.gz.csi
     touch ${meta.sample}.mosdepth.summary.txt
     """
 }

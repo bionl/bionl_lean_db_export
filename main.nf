@@ -8,6 +8,7 @@ nextflow.enable.dsl = 2
 params.samplesheet          = params.samplesheet ?: "${workflow.projectDir}/data/samplesheet.tsv"
 params.outdir               = params.outdir ?: params.outdir
 params.mosdepth_thresholds  = "10,20,30"
+params.script_dir           = params.script_dir ?: "${workflow.projectDir}/scripts"
 
 // ── Shared reference / annotation resources ───────────────────────────────────
 params.bins_bed             = params.bins_bed ?: "${workflow.projectDir}/data/MANE_bins_unique.bed"
@@ -105,7 +106,7 @@ workflow {
     MOSDEPTH_THRESHOLDS(ch_bam_input, ch_bins_bed)
 
     // ── Step 4: Convert mosdepth thresholds to coverage TSV ──────────────────
-    CONVERT_THRESHOLDS(MOSDEPTH_THRESHOLDS.out.thresholds_bed)
+    CONVERT_THRESHOLDS(MOSDEPTH_THRESHOLDS.out.regions_bed)
 }
 
 // ─────────────────────────────────────────────
