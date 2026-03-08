@@ -26,7 +26,7 @@ process EXTRACT_VARIANTS {
     def sample = meta.sample
     def assay  = meta.assay
     """
-    ${variants_script} \\
+    python ${variants_script} \\
         --sample  "${sample}" \\
         --assay   "${assay}"  \\
         --vcf     "${vcf}"

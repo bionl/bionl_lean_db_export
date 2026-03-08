@@ -26,7 +26,7 @@ process CONVERT_THRESHOLDS {
     def sample = meta.sample
     def assay  = meta.assay
     """
-    ${coverage_script} \\
+    python ${coverage_script} \\
         --regions_file "${regions_bed}" \\
         --sample  "${sample}" \\
         --assay   "${assay}"
