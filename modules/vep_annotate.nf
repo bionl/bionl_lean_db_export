@@ -12,10 +12,9 @@ process VEP_ANNOTATE {
 
     publishDir(
         path:    "${params.outdir}/${meta.sample}/vcf",
-        mode:    'copy',
         pattern: '*.vep.vcf'
     )
-    
+
     input:
     tuple val(meta), path(vcf)
     path vep_cache

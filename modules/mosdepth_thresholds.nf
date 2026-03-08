@@ -12,7 +12,6 @@ process MOSDEPTH_THRESHOLDS {
     
     publishDir(
         path:    "${params.outdir}/${meta.sample}/mosdepth",
-        mode:    'copy',
         pattern: '*.{bed.gz,bed.gz.csi,summary.txt}'
     )
 
