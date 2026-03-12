@@ -20,8 +20,8 @@ process MOSDEPTH_THRESHOLDS {
     path  bins_bed
 
     output:
-    tuple val(meta), path("${meta.sample}.per_base.bed.gz"),    emit:   per_base_bed
-    tuple val(meta), path("${meta.sample}.per_base.bed.gz.csi"),    emit: per_base_bed_index
+    tuple val(meta), path("${meta.sample}.per-base.bed.gz"),    emit:   per_base_bed
+    tuple val(meta), path("${meta.sample}.per-base.bed.gz.csi"),    emit: per_base_bed_index
     tuple val(meta), path("${meta.sample}.mosdepth.summary.txt"),     emit: mosdepth_summary
 
     script:
@@ -38,8 +38,8 @@ process MOSDEPTH_THRESHOLDS {
 
     stub:
     """
-    touch ${meta.sample}.per_base.bed.gz
-    touch ${meta.sample}.per_base.bed.gz.csi
+    touch ${meta.sample}.per-base.bed.gz
+    touch ${meta.sample}.per-base.bed.gz.csi
     touch ${meta.sample}.mosdepth.summary.txt
     """
 }
