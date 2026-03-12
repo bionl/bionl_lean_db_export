@@ -48,10 +48,10 @@ workflow {
     ch_vep_fasta          = Channel.value(file(params.vep_fasta,          checkIfExists: true))
     ch_vep_fasta_fai      = Channel.value(file(params.vep_fasta_fai,      checkIfExists: true))
     ch_vep_plugins        = Channel.value(file(params.vep_plugins))
-    ch_revel_vcf          = Channel.value(file(params.revel_vcf,          checkIfExists: true))
-    ch_revel_vcf_tbi      = Channel.value(file(params.revel_vcf_tbi,      checkIfExists: true))
-    ch_alpha_vcf          = Channel.value(file(params.alpha_missense_vcf, checkIfExists: true))
-    ch_alpha_vcf_tbi      = Channel.value(file(params.alpha_missense_vcf_tbi, checkIfExists: true))
+    //ch_revel_vcf          = Channel.value(file(params.revel_vcf,          checkIfExists: true))
+    //ch_revel_vcf_tbi      = Channel.value(file(params.revel_vcf_tbi,      checkIfExists: true))
+    //ch_alpha_vcf          = Channel.value(file(params.alpha_missense_vcf, checkIfExists: true))
+    //ch_alpha_vcf_tbi      = Channel.value(file(params.alpha_missense_vcf_tbi, checkIfExists: true))
     ch_clinvar_vcf        = Channel.value(file(params.clinvar_vcf,        checkIfExists: true))
     ch_clinvar_vcf_tbi    = Channel.value(file(params.clinvar_vcf_tbi,    checkIfExists: true))
     //ch_spliceai_snv       = Channel.value(file(params.spliceai_snv_vcf,   checkIfExists: true))
@@ -82,10 +82,10 @@ workflow {
         ch_vep_cache,
         ch_vep_fasta,
         ch_vep_fasta_fai,
-        ch_revel_vcf,
-        ch_revel_vcf_tbi,
-        ch_alpha_vcf,
-        ch_alpha_vcf_tbi,
+        //ch_revel_vcf,
+        //ch_revel_vcf_tbi,
+        //ch_alpha_vcf,
+        //ch_alpha_vcf_tbi,
         ch_clinvar_vcf,
         ch_clinvar_vcf_tbi,
         //ch_spliceai_snv,

@@ -20,10 +20,10 @@ process VEP_ANNOTATE {
     path vep_cache
     path vep_fasta
     path vep_fasta_fai
-    path revel_vcf
-    path revel_vcf_tbi
-    path alpha_missense_vcf
-    path alpha_missense_vcf_tbi
+    //path revel_vcf
+    //path revel_vcf_tbi
+    //path alpha_missense_vcf
+    //path alpha_missense_vcf_tbi
     path clinvar_vcf
     path clinvar_vcf_tbi
     //path spliceai_snv_vcf
@@ -58,8 +58,6 @@ process VEP_ANNOTATE {
         --fasta          ${vep_fasta} \\
         --assembly GRCh38 --species homo_sapiens \\
         --hgvs --symbol --vcf --everything --canonical --merged\\
-        --plugin REVEL,${revel_vcf} \\
-        --plugin AlphaMissense,file=${alpha_missense_vcf},cols=am_pathogenicity:am_class \\
         --custom ${clinvar_vcf},ClinVar,vcf,exact,0,CLNSIG,CLNREVSTAT,ALLELEID \\
     """
 

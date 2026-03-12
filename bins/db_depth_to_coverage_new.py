@@ -2,6 +2,7 @@
 import argparse
 import pandas as pd
 from pathlib import Path
+import gzip
 
 def main():
     ap = argparse.ArgumentParser()
@@ -13,8 +14,8 @@ def main():
 
     outfile = Path(args.outdir) / f"{args.sample}_{args.assay}_coverage.tsv"
 
-    with open(outfile, "w") as f:
-        f.write("chrom\tpos\tdepth\tover_10\tover_20\tover_30\tover_50\tover_100\tn_samples\n")
+    with gzip.open(outfile, "wt") as f:
+        f.write("chrom\tpos\tdepth")
 
     total_rows = 0
 
@@ -26,15 +27,9 @@ def main():
     ):
         chunk["chrom"]     = chunk["chrom"].str.replace("chr", "", regex=False)
         chunk["pos"]       = chunk["start"]
-        chunk["over_10"]   = (chunk["depth"] >= 10).astype(int)
-        chunk["over_20"]   = (chunk["depth"] >= 20).astype(int)
-        chunk["over_30"]   = (chunk["depth"] >= 30).astype(int)
-        chunk["over_50"]   = (chunk["depth"] >= 50).astype(int)
-        chunk["over_100"]  = (chunk["depth"] >= 100).astype(int)
-        chunk["n_samples"] = 1
 
-        chunk[["chrom", "pos", "depth", "over_10", "over_20", "over_30", "over_50", "over_100", "n_samples"]]\
-            .to_csv(outfile, sep="\t", index=False, header=False, mode="a")
+        chunk[["chrom", "pos", "depth"]]\
+            .to_csv(outfile, sep="\t", index=False, header=False, mode="a", compression="gzip")
 
         total_rows += len(chunk)
 
