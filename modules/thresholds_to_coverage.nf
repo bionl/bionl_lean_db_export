@@ -8,7 +8,7 @@
 process CONVERT_THRESHOLDS {
 
     tag "${meta.sample} | ${meta.assay}"
-    label 'low_cpu'
+    label 'high_cpu'
 
     publishDir(
         path:    "${params.outdir}/coverage",
@@ -17,7 +17,7 @@ process CONVERT_THRESHOLDS {
     )
 
     input:
-    tuple val(meta), path(regions_bed)
+    tuple val(meta), path(per_base_bed)
     path coverage_script
     output:
     tuple val(meta), path("${meta.sample}_${meta.assay}_coverage.tsv"), emit: coverage_tsv
@@ -27,7 +27,7 @@ process CONVERT_THRESHOLDS {
     def assay  = meta.assay
     """
     python ${coverage_script} \\
-        --regions_file "${regions_bed}" \\
+        --per_base_bed "${per_base_bed}" \\
         --sample  "${sample}" \\
         --assay   "${assay}"
     """

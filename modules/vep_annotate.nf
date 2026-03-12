@@ -26,12 +26,12 @@ process VEP_ANNOTATE {
     path alpha_missense_vcf_tbi
     path clinvar_vcf
     path clinvar_vcf_tbi
-    path spliceai_snv_vcf
-    path spliceai_snv_vcf_tbi
-    path spliceai_indel_vcf
-    path spliceai_indel_vcf_tbi
-    path bayesdel_vcf
-    path bayesdel_vcf_tbi
+    //path spliceai_snv_vcf
+    //path spliceai_snv_vcf_tbi
+    //path spliceai_indel_vcf
+    //path spliceai_indel_vcf_tbi
+    //path bayesdel_vcf
+    //path bayesdel_vcf_tbi
     path vep_plugins
 
     output:
@@ -57,12 +57,10 @@ process VEP_ANNOTATE {
         --dir_plugins    ${vep_plugins} \\
         --fasta          ${vep_fasta} \\
         --assembly GRCh38 --species homo_sapiens \\
-        --hgvs --symbol --vcf --everything --canonical --merged\\
+        --hgvs --symbol --vcf --everything --canonical\\
         --plugin REVEL,${revel_vcf} \\
         --plugin AlphaMissense,file=${alpha_missense_vcf},cols=am_pathogenicity:am_class \\
         --custom ${clinvar_vcf},ClinVar,vcf,exact,0,CLNSIG,CLNREVSTAT,ALLELEID \\
-        --plugin SpliceAI,snv=${spliceai_snv_vcf},indel=${spliceai_indel_vcf} \\
-        --plugin BayesDel,file=${bayesdel_vcf} \\
     """
 
     stub:

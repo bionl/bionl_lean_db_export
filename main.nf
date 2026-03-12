@@ -11,7 +11,7 @@ params.mosdepth_thresholds  = "10,20,30"
 params.script_dir           = params.script_dir ?: "${workflow.projectDir}/bins"
 
 // ── Shared reference / annotation resources ───────────────────────────────────
-params.bins_bed             = params.bins_bed ?: "${workflow.projectDir}/data/MANE_bins_unique.bed"
+params.bins_bed             = params.bins_bed ?: "${workflow.projectDir}/data/MANE_bins_unique_exon.bed"
 
 // ─────────────────────────────────────────────
 //  Module imports
@@ -54,12 +54,12 @@ workflow {
     ch_alpha_vcf_tbi      = Channel.value(file(params.alpha_missense_vcf_tbi, checkIfExists: true))
     ch_clinvar_vcf        = Channel.value(file(params.clinvar_vcf,        checkIfExists: true))
     ch_clinvar_vcf_tbi    = Channel.value(file(params.clinvar_vcf_tbi,    checkIfExists: true))
-    ch_spliceai_snv       = Channel.value(file(params.spliceai_snv_vcf,   checkIfExists: true))
-    ch_spliceai_snv_tbi   = Channel.value(file(params.spliceai_snv_vcf_tbi, checkIfExists: true))
-    ch_spliceai_indel     = Channel.value(file(params.spliceai_indel_vcf, checkIfExists: true))
-    ch_spliceai_indel_tbi = Channel.value(file(params.spliceai_indel_vcf_tbi, checkIfExists: true))
-    ch_bayesdel_vcf       = Channel.value(file(params.bayesdel_vcf,       checkIfExists: true))
-    ch_bayesdel_vcf_tbi   = Channel.value(file(params.bayesdel_vcf_tbi,   checkIfExists: true))
+    //ch_spliceai_snv       = Channel.value(file(params.spliceai_snv_vcf,   checkIfExists: true))
+    //ch_spliceai_snv_tbi   = Channel.value(file(params.spliceai_snv_vcf_tbi, checkIfExists: true))
+    //ch_spliceai_indel     = Channel.value(file(params.spliceai_indel_vcf, checkIfExists: true))
+    //ch_spliceai_indel_tbi = Channel.value(file(params.spliceai_indel_vcf_tbi, checkIfExists: true))
+    //ch_bayesdel_vcf       = Channel.value(file(params.bayesdel_vcf,       checkIfExists: true))
+    //ch_bayesdel_vcf_tbi   = Channel.value(file(params.bayesdel_vcf_tbi,   checkIfExists: true))
 
     // ── Parse samplesheet ─────────────────────────────────────────────────────
     ch_samples = Channel
@@ -88,12 +88,12 @@ workflow {
         ch_alpha_vcf_tbi,
         ch_clinvar_vcf,
         ch_clinvar_vcf_tbi,
-        ch_spliceai_snv,
-        ch_spliceai_snv_tbi,
-        ch_spliceai_indel,
-        ch_spliceai_indel_tbi,
-        ch_bayesdel_vcf,
-        ch_bayesdel_vcf_tbi,
+        //ch_spliceai_snv,
+        //ch_spliceai_snv_tbi,
+        //ch_spliceai_indel,
+        //ch_spliceai_indel_tbi,
+        //ch_bayesdel_vcf,
+        //ch_bayesdel_vcf_tbi,
         ch_vep_plugins
     )
     // ── Step 2: Extract variants from VEP-annotated VCF ───────────────────────
@@ -107,20 +107,5 @@ workflow {
 
     // ── Step 4: Convert mosdepth thresholds to coverage TSV ──────────────────
     ch_coverage_script = Channel.value(file("${params.script_dir}/db_depth_to_coverage_new.py"))
-    CONVERT_THRESHOLDS(MOSDEPTH_THRESHOLDS.out.regions_bed, ch_coverage_script)
-}
-
-// ─────────────────────────────────────────────
-//  Completion summary
-// ─────────────────────────────────────────────
-workflow.onComplete {
-    log.info """
-    ╔══════════════════════════════════════════╗
-    ║       Pipeline execution summary         ║
-    ╠══════════════════════════════════════════╣
-    ║ Status    : ${workflow.success ? 'SUCCESS ✔' : 'FAILED ✘'}
-    ║ Duration  : ${workflow.duration}
-    ║ Output    : ${params.outdir}
-    ╚══════════════════════════════════════════╝
-    """.stripIndent()
+    CONVERT_THRESHOLDS(MOSDEPTH_THRESHOLDS.out.per_base_bed, ch_coverage_script)
 }

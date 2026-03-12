@@ -104,6 +104,10 @@ def main():
 
             chrom, pos, _id, ref, alt_str, qual, flt, info, fmt = c[:9]
             sample_field = c[9]
+            
+            # Remove "chr" prefix from chromosome if present
+            if chrom.startswith("chr"):
+                chrom = chrom[3:]
 
             info_d = parse_info(info)
             csq_raw = info_d.get("CSQ")
