@@ -13,14 +13,14 @@ process CONVERT_THRESHOLDS {
     publishDir(
         path:    "${params.outdir}/coverage",
         mode:    'copy',
-        pattern: '*.tsv'
+        pattern: '*.tsv.gz'
     )
 
     input:
     tuple val(meta), path(per_base_bed)
     path coverage_script
     output:
-    tuple val(meta), path("${meta.sample}_${meta.assay}_coverage.tsv"), emit: coverage_tsv
+    tuple val(meta), path("${meta.sample}_${meta.assay}_coverage.tsv.gz"), emit: coverage_tsv
 
     script:
     def sample = meta.sample
@@ -34,6 +34,6 @@ process CONVERT_THRESHOLDS {
 
     stub:
     """
-    touch ${meta.sample}_${meta.assay}_coverage.tsv
+    touch ${meta.sample}_${meta.assay}_coverage.tsv.gz
     """
 }

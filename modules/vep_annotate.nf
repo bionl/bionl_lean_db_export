@@ -12,7 +12,7 @@ process VEP_ANNOTATE {
 
     publishDir(
         path:    "${params.outdir}/${meta.sample}/vcf",
-        pattern: '*.vep.vcf'
+        pattern: '*.vep.vcf.gz,*.vep.vcf.gz.tbi'
     )
 
     input:
@@ -35,7 +35,8 @@ process VEP_ANNOTATE {
     path vep_plugins
 
     output:
-    tuple val(meta), path("${meta.sample}.vep.vcf"), emit: vep_vcf
+    tuple val(meta), path("${meta.sample}.vep.vcf.gz"), emit: vep_vcf
+    tuple val(meta), path("${meta.sample}.vep.vcf.gz.tbi"), emit: vep_vcf_tbi
 
     script:
     def sample = meta.sample
@@ -59,10 +60,14 @@ process VEP_ANNOTATE {
         --assembly GRCh38 --species homo_sapiens \\
         --hgvs --symbol --vcf --everything --canonical --merged\\
         --custom ${clinvar_vcf},ClinVar,vcf,exact,0,CLNSIG,CLNREVSTAT,ALLELEID \\
+
+    bgzip ${sample}.vep.vcf
+    tabix -p vcf ${sample}.vep.vcf.gz
     """
 
     stub:
     """
-    touch ${meta.sample}.vep.vcf
+    touch ${meta.sample}.vep.vcf.gz
+    touch ${meta.sample}.vep.vcf.gz.tbi
     """
 }

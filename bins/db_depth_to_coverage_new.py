@@ -12,7 +12,7 @@ def main():
     ap.add_argument("--outdir",       default=".")
     args = ap.parse_args()
 
-    outfile = Path(args.outdir) / f"{args.sample}_{args.assay}_coverage.tsv"
+    outfile = Path(args.outdir) / f"{args.sample}_{args.assay}_coverage.tsv.gz"
 
     with gzip.open(outfile, "wt") as f:
         f.write("chrom\tpos\tdepth")
