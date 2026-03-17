@@ -20,6 +20,8 @@ include { VEP_ANNOTATE        } from './modules/vep_annotate'
 include { EXTRACT_VARIANTS    } from './modules/extract_variants'
 include { MOSDEPTH_THRESHOLDS } from './modules/mosdepth_thresholds'
 include { CONVERT_THRESHOLDS  } from './modules/thresholds_to_coverage'
+include { LOAD_VARIANTS       } from './modules/load_variants'
+include { LOAD_DENSE_DEPTH    } from './modules/load_dense_depth'
 
 // ─────────────────────────────────────────────
 //  Helper: assert a required param is set
@@ -108,4 +110,15 @@ workflow {
     // ── Step 4: Convert mosdepth thresholds to coverage TSV ──────────────────
     ch_coverage_script = Channel.value(file("${params.script_dir}/db_depth_to_coverage_new.py"))
     CONVERT_THRESHOLDS(MOSDEPTH_THRESHOLDS.out.per_base_bed, ch_coverage_script)
+
+    // ── Step 5: Load dense depth into BigQuery via vaic-service ──────────────
+    LOAD_DENSE_DEPTH(CONVERT_THRESHOLDS.out.coverage_tsv)
+
+    // ── Step 6: Load variants into BigQuery (after coverage succeeds) ────────
+    // Join the variants output with the dense-depth completion signal by sample
+    ch_variants_ready = EXTRACT_VARIANTS.out.variants_tsv
+        .join(LOAD_DENSE_DEPTH.out.loaded_sample.map { meta -> [ meta, true ] })
+        .map { meta, variants_tsv, _done -> [ meta, variants_tsv ] }
+
+    LOAD_VARIANTS(ch_variants_ready)
 }
