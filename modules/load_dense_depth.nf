@@ -28,6 +28,7 @@ process LOAD_DENSE_DEPTH {
     log.info "[LOAD_DENSE_DEPTH] ${sampleId} -> POST ${serviceUrl}/variants-db/load-dense-depth  fileUrl=${gcsPath}"
     """
     set -euo pipefail
+    apk add --no-cache curl >/dev/null 2>&1
 
     HTTP_CODE=\$(curl -s -o response.json -w '%{http_code}' \
         --retry 3 --retry-delay 5 --retry-connrefused \
