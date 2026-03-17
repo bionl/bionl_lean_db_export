@@ -29,20 +29,13 @@ process LOAD_VARIANTS {
     """
     set -euo pipefail
 
-    HTTP_CODE=\$(wget -q -O response.json \
-        --server-response \
+    wget -O - \
         --tries=3 --waitretry=5 \
         --timeout=600 \
-        --header='Content-Type: application/json' \
-        --header="x-api-key: ${apiKey}" \
-        --post-data='{"fileUrl": "${gcsPath}", "sample_id": "${sampleId}"}' \
-        "${serviceUrl}/variants-db/load-variants" 2>&1 | awk '/HTTP\// {code=\$2} END {print code}')
-
-    if [ "\$HTTP_CODE" -lt 200 ] || [ "\$HTTP_CODE" -ge 300 ]; then
-        echo "ERROR: vaic-service returned HTTP \$HTTP_CODE"
-        cat response.json >&2
-        exit 1
-    fi
+        --header 'Content-Type: application/json' \
+        --header 'x-api-key: ${apiKey}' \
+        --post-data '{"fileUrl": "${gcsPath}", "sample_id": "${sampleId}"}' \
+        '${serviceUrl}/variants-db/load-variants'
 
     echo "Variants loaded for ${sampleId}"
     """
