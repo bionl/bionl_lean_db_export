@@ -23,15 +23,19 @@ process LOAD_VARIANTS {
     script:
     def sampleId   = meta.sample
     def gcsPath    = "${params.outdir}/variants/${variants_tsv.name}"
+    def serviceUrl = params.vaic_service_url
+    def apiKey     = params.vaic_api_key
     """
     set -euo pipefail
+
+    echo "curl -s -o response.json -w '%{http_code}' --retry 3 --retry-delay 5 --retry-connrefused --max-time 600 -X POST ${serviceUrl}/variants-db/load-variants -H 'Content-Type: application/json' -H 'x-api-key: ***' -d '{\"fileUrl\": \"${gcsPath}\", \"sample_id\": \"${sampleId}\"}'"
 
     HTTP_CODE=\$(curl -s -o response.json -w '%{http_code}' \
         --retry 3 --retry-delay 5 --retry-connrefused \
         --max-time 600 \
-        -X POST "${params.vaic_service_url}/variants-db/load-variants" \
+        -X POST "${serviceUrl}/variants-db/load-variants" \
         -H 'Content-Type: application/json' \
-        -H "x-api-key: ${params.vaic_api_key}" \
+        -H "x-api-key: ${apiKey}" \
         -d '{"fileUrl": "${gcsPath}", "sample_id": "${sampleId}"}')
 
     if [ "\$HTTP_CODE" -lt 200 ] || [ "\$HTTP_CODE" -ge 300 ]; then

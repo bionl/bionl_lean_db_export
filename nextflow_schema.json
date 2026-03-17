@@ -1,72 +1,79 @@
 {
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/Bionl/bionl_lean_db_export/dev/nextflow_schema.json",
-    "title": "bionl_lean_db_export pipeline parameters",
-    "description": "Generates database-ready variants and coverage tables from consensus VCFs and BAMs.",
-    "type": "object",
-  
-    "$defs": {
-  
-      "io_options": {
-        "title": "Input / Output",
-        "type": "object",
-        "fa_icon": "fas fa-folder-open",
-        "properties": {
-  
-          "samplesheet": {
-            "type": "string",
-            "title": "Samplesheet TSV",
-            "description": "Tab-separated file with columns: sample, assay, vcf, bam, bam_index.",
-            "format": "file-path",
-            "pattern": "^\\S+\\.tsv$"
-          },
-          "bins_bed": {
-            "type": "string",
-            "title": "BED file",
-            "description": "BED file containing the genomic bins.",
-            "format": "file-path",
-            "pattern": "^\\S+\\.bed$"
-          },
-          "outdir": {
-            "type": "string",
-            "title": "Output directory",
-            "description": "Directory where all pipeline results will be written.",
-            "format": "directory-path"
-          }
-  
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/Bionl/bionl_lean_db_export/dev/nextflow_schema.json",
+  "title": "bionl_lean_db_export pipeline parameters",
+  "description": "Generates database-ready variants and coverage tables from consensus VCFs and BAMs.",
+  "type": "object",
+  "$defs": {
+    "io_options": {
+      "title": "Input / Output",
+      "type": "object",
+      "fa_icon": "fas fa-folder-open",
+      "properties": {
+        "samplesheet": {
+          "type": "string",
+          "title": "Samplesheet TSV",
+          "description": "Tab-separated file with columns: sample, assay, vcf, bam, bam_index.",
+          "format": "file-path",
+          "pattern": "^\\S+\\.tsv$"
         },
-        "required": ["samplesheet", "bins_bed", "outdir"]
+        "bins_bed": {
+          "type": "string",
+          "title": "BED file",
+          "description": "BED file containing the genomic bins.",
+          "format": "file-path",
+          "pattern": "^\\S+\\.bed$"
+        },
+        "outdir": {
+          "type": "string",
+          "title": "Output directory",
+          "description": "Directory where all pipeline results will be written.",
+          "format": "directory-path"
+        }
       },
-
-      "api_options": {
-        "title": "API Configuration",
-        "type": "object",
-        "fa_icon": "fas fa-key",
-        "properties": {
-
-          "vaic_service_url": {
-            "type": "string",
-            "title": "VAIC Service URL",
-            "description": "Base URL of the vaic-service API (e.g. https://vaic-service-xxxxx.run.app).",
-            "format": "uri"
-          },
-          "vaic_api_key": {
-            "type": "string",
-            "title": "VAIC API Key",
-            "description": "API key for authenticating with the vaic-service endpoints."
-          }
-
-        },
-        "required": ["vaic_service_url", "vaic_api_key"]
-      }
-
+      "required": [
+        "samplesheet",
+        "bins_bed",
+        "outdir"
+      ]
     },
-  
-    "allOf": [
-      { "$ref": "#/$defs/io_options" },
-      { "$ref": "#/$defs/api_options" }
-    ],
-  
-    "required": ["samplesheet", "bins_bed", "outdir", "vaic_service_url", "vaic_api_key"],
-    "additionalProperties": true
-  }
+    "api_options": {
+      "title": "API Configuration",
+      "type": "object",
+      "fa_icon": "fas fa-key",
+      "properties": {
+        "vaic_service_url": {
+          "type": "string",
+          "title": "VAIC Service URL",
+          "description": "Base URL of the vaic-service API (e.g. https://vaic-service-xxxxx.run.app).",
+          "format": "uri"
+        },
+        "vaic_api_key": {
+          "type": "string",
+          "title": "VAIC API Key",
+          "description": "API key for authenticating with the vaic-service endpoints."
+        }
+      },
+      "required": [
+        "vaic_service_url",
+        "vaic_api_key"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "$ref": "#/$defs/io_options"
+    },
+    {
+      "$ref": "#/$defs/api_options"
+    }
+  ],
+  "required": [
+    "samplesheet",
+    "bins_bed",
+    "outdir",
+    "vaic_service_url",
+    "vaic_api_key"
+  ],
+  "additionalProperties": true
+}
