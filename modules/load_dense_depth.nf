@@ -28,16 +28,15 @@ process LOAD_DENSE_DEPTH {
     log.info "[LOAD_DENSE_DEPTH] ${sampleId} -> POST ${serviceUrl}/variants-db/load-dense-depth  fileUrl=${gcsPath}"
     """
     set -euo pipefail
-    apk add --no-cache curl >/dev/null 2>&1
 
-    HTTP_CODE=\$(curl -s -o response.json -w '%{http_code}' \
-        --retry 3 --retry-delay 5 --retry-connrefused \
-        --max-time 600 \
-        -X POST "${serviceUrl}/variants-db/load-dense-depth" \
-        -H 'Content-Type: application/json' \
-        -H "x-api-key: ${apiKey}" \
-        -d '{"fileUrl": "${gcsPath}", "sample_id": "${sampleId}"}')
-
+    HTTP_CODE=\$(wget -q -O response.json \
+        --server-response \
+        --tries=3 --waitretry=5 \
+        --timeout=600 \
+        --header='Content-Type: application/json' \
+        --header="x-api-key: ${apiKey}" \
+        --post-data='{"fileUrl": "${gcsPath}", "sample_id": "${sampleId}"}' \
+        "${serviceUrl}/variants-db/load-dense-depth" 2>&1 | awk '/HTTP\// {code=\$2} END {print code}')
 
     if [ "\$HTTP_CODE" -lt 200 ] || [ "\$HTTP_CODE" -ge 300 ]; then
         echo "ERROR: vaic-service returned HTTP \$HTTP_CODE"
