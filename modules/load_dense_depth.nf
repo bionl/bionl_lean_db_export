@@ -27,17 +27,22 @@ process LOAD_DENSE_DEPTH {
     def apiKey     = params.vaic_api_key
     log.info "[LOAD_DENSE_DEPTH] ${sampleId} -> POST ${serviceUrl}/variants-db/load-dense-depth  fileUrl=${gcsPath}"
     """
-    set -euo pipefail
+    pip install -q requests
 
-    wget -O - \
-        --tries=3 --waitretry=5 \
-        --timeout=600 \
-        --header 'Content-Type: application/json' \
-        --header 'x-api-key: ${apiKey}' \
-        --post-data '{"fileUrl": "${gcsPath}", "sample_id": "${sampleId}"}' \
-        '${serviceUrl}/variants-db/load-dense-depth'
+    python3 << 'PYEOF'
+import requests, sys
 
-    echo "Dense depth loaded for ${sampleId}"
+resp = requests.post(
+    "${serviceUrl}/variants-db/load-dense-depth",
+    json={"fileUrl": "${gcsPath}", "sample_id": "${sampleId}"},
+    headers={"x-api-key": "${apiKey}"},
+    timeout=600,
+)
+print(f"Status: {resp.status_code}")
+print(resp.text)
+resp.raise_for_status()
+print("Dense depth loaded for ${sampleId}")
+PYEOF
     """
 
     stub:
