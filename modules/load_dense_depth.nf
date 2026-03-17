@@ -25,10 +25,9 @@ process LOAD_DENSE_DEPTH {
     def gcsPath    = "${params.outdir}/coverage/${coverage_tsv.name}"
     def serviceUrl = params.vaic_service_url
     def apiKey     = params.vaic_api_key
+    log.info "[LOAD_DENSE_DEPTH] ${sampleId} -> POST ${serviceUrl}/variants-db/load-dense-depth  fileUrl=${gcsPath}"
     """
     set -euo pipefail
-
-    echo "curl -s -o response.json -w '%{http_code}' --retry 3 --retry-delay 5 --retry-connrefused --max-time 600 -X POST ${serviceUrl}/variants-db/load-dense-depth -H 'Content-Type: application/json' -H 'x-api-key: ***' -d '{\"fileUrl\": \"${gcsPath}\", \"sample_id\": \"${sampleId}\"}'"
 
     HTTP_CODE=\$(curl -s -o response.json -w '%{http_code}' \
         --retry 3 --retry-delay 5 --retry-connrefused \
