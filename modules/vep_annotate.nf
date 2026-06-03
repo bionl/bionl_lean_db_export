@@ -1,11 +1,11 @@
 // ─────────────────────────────────────────────────────────────────────────────
 //  modules/vep_annotate.nf
-//  Process: VEP_ANNOTATE
+//  Process: VEP_Annotate_DB
 //  Input  : raw / consensus VCF (plain or .gz) + all annotation resources
 //  Output : {sample}.vep.vcf  (uncompressed, for downstream EXTRACT_VARIANTS)
 // ─────────────────────────────────────────────────────────────────────────────
 
-process VEP_ANNOTATE {
+process VEP_Annotate_DB {
 
     tag { "${meta.sample} (${meta.assay})" }
     label 'high_cpu'
