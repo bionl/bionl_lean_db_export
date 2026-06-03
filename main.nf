@@ -16,7 +16,7 @@ params.bins_bed             = params.bins_bed ?: "${workflow.projectDir}/data/MA
 // ─────────────────────────────────────────────
 //  Module imports
 // ─────────────────────────────────────────────
-include { VEP_ANNOTATE        } from './modules/vep_annotate'
+include { VEP_Annotate_DB        } from './modules/vep_annotate'
 include { EXTRACT_VARIANTS    } from './modules/extract_variants'
 include { MOSDEPTH_THRESHOLDS } from './modules/mosdepth_thresholds'
 include { CONVERT_THRESHOLDS  } from './modules/thresholds_to_coverage'
@@ -79,7 +79,7 @@ workflow {
     // ── Step 1: VEP annotation ────────────────────────────────────────────────
     ch_vcf_only = ch_samples.map { meta, vcf, bam, bam_index -> [ meta, vcf ] }
 
-    VEP_ANNOTATE(
+    VEP_Annotate_DB(
         ch_vcf_only,
         ch_vep_cache,
         ch_vep_fasta,
@@ -100,7 +100,7 @@ workflow {
     )
     // ── Step 2: Extract variants from VEP-annotated VCF ───────────────────────
     ch_variants_script = Channel.value(file("${params.script_dir}/db_vep_vcf_to_variants_all.py"))
-    EXTRACT_VARIANTS(VEP_ANNOTATE.out.vep_vcf, ch_variants_script)
+    EXTRACT_VARIANTS(VEP_Annotate_DB.out.vep_vcf, ch_variants_script)
 
     // ── Step 3: BAM coverage (runs in parallel with VEP/extraction) ───────────
     ch_bam_input = ch_samples.map { meta, vcf, bam, bam_index -> [ meta, bam, bam_index ] }
