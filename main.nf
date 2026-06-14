@@ -106,6 +106,5 @@ workflow {
     MOSDEPTH_THRESHOLDS(ch_bam_input, ch_bins_bed)
 
     // ── Step 4: Convert mosdepth thresholds to coverage TSV ──────────────────
-    ch_coverage_script = Channel.value(file("${params.script_dir}/db_depth_to_coverage_new.py"))
-    CONVERT_THRESHOLDS(MOSDEPTH_THRESHOLDS.out.per_base_bed, ch_coverage_script)
+    CONVERT_THRESHOLDS(MOSDEPTH_THRESHOLDS.out.per_base_bed)
 }

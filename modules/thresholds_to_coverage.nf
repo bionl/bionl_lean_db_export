@@ -8,7 +8,6 @@
 process CONVERT_THRESHOLDS {
 
     tag "${meta.sample} | ${meta.assay}"
-    label 'high_cpu'
 
     publishDir(
         path:    "${params.outdir}/coverage",
@@ -18,7 +17,7 @@ process CONVERT_THRESHOLDS {
 
     input:
     tuple val(meta), path(per_base_bed)
-    path coverage_script
+
     output:
     tuple val(meta), path("${meta.sample}_${meta.assay}_coverage.tsv.gz"), emit: coverage_tsv
 
@@ -26,10 +25,7 @@ process CONVERT_THRESHOLDS {
     def sample = meta.sample
     def assay  = meta.assay
     """
-    python ${coverage_script} \\
-        --per_base_bed "${per_base_bed}" \\
-        --sample  "${sample}" \\
-        --assay   "${assay}"
+    { printf 'chrom\tpos\tdepth\\n'; zcat "${per_base_bed}" | awk 'BEGIN{OFS="\\t"} {gsub("chr","",\$1); print \$1, \$2, \$4}'; } | gzip > ${sample}_${assay}_coverage.tsv.gz
     """
 
     stub:
