@@ -106,5 +106,5 @@ workflow {
     MOSDEPTH_THRESHOLDS(ch_bam_input, ch_bins_bed)
 
     // ── Step 4: Convert mosdepth thresholds to coverage TSV ──────────────────
-    CONVERT_THRESHOLDS(MOSDEPTH_THRESHOLDS.out.per_base_bed)
+    CONVERT_THRESHOLDS(MOSDEPTH_THRESHOLDS.out.per_base_bed, ch_bins_bed)
 }

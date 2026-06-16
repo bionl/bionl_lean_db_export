@@ -17,6 +17,7 @@ process CONVERT_THRESHOLDS {
 
     input:
     tuple val(meta), path(per_base_bed)
+    path bins_bed
 
     output:
     tuple val(meta), path("${meta.sample}_${meta.assay}_coverage.tsv.gz"), emit: coverage_tsv
@@ -25,7 +26,10 @@ process CONVERT_THRESHOLDS {
     def sample = meta.sample
     def assay  = meta.assay
     """
-    { printf 'chrom\tpos\tdepth\\n'; zcat "${per_base_bed}" | awk 'BEGIN{OFS="\\t"} {gsub("chr","",\$1); print \$1, \$2, \$4}'; } | gzip > ${sample}_${assay}_coverage.tsv.gz
+    { printf 'chrom\tpos\tdepth\\n'; \
+      bedtools intersect -a "${per_base_bed}" -b "${bins_bed}" -sorted | \
+      awk 'BEGIN{OFS="\\t"} {gsub("chr","",\$1); print \$1, \$2, \$4}'; } | \
+      gzip > ${sample}_${assay}_coverage.tsv.gz
     """
 
     stub:
