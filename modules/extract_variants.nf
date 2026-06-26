@@ -18,6 +18,7 @@ process EXTRACT_VARIANTS {
 
     input:
     tuple val(meta), path(vcf)
+    path variants_script
 
     output:
     tuple val(meta), path("${meta.sample}_${meta.assay}_variants.tsv"), emit: variants_tsv
@@ -26,7 +27,7 @@ process EXTRACT_VARIANTS {
     def sample = meta.sample
     def assay  = meta.assay
     """
-    python ${params.script_dir}/db_vep_vcf_to_variants_all.py \\
+    python ${variants_script} \\
         --sample  "${sample}" \\
         --assay   "${assay}"  \\
         --vcf     "${vcf}"

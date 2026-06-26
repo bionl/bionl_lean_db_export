@@ -57,8 +57,9 @@ workflow {
         }
 
     // ── Step 1: Extract variants from raw VCF ────────────────────────────────
-    ch_vcf_only = ch_samples.map { meta, vcf, bam, bam_index -> [ meta, vcf ] }
-    EXTRACT_VARIANTS(ch_vcf_only)
+    ch_vcf_only        = ch_samples.map { meta, vcf, bam, bam_index -> [ meta, vcf ] }
+    ch_variants_script = Channel.value(file("${params.script_dir}/db_vep_vcf_to_variants_all.py"))
+    EXTRACT_VARIANTS(ch_vcf_only, ch_variants_script)
 
     // ── Step 2: BAM coverage (runs in parallel with variant extraction) ──────
     ch_bam_input = ch_samples.map { meta, vcf, bam, bam_index -> [ meta, bam, bam_index ] }
