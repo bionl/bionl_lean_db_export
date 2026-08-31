@@ -23,7 +23,6 @@ process PERBASE_TO_COVERAGE {
 
     input:
     tuple val(meta), path(per_base_bed)
-    path  bins_bed
 
     output:
     tuple val(meta), path("${meta.sample}_${meta.assay}_coverage.tsv.gz"), emit: coverage_tsv
@@ -32,10 +31,8 @@ process PERBASE_TO_COVERAGE {
     def sample = meta.sample
     def assay  = meta.assay
     """
-    sort -k1,1V -k2,2n "${bins_bed}" | sed 's/^chr//' > bins_nochr_sorted.bed
     gzip -dc "${per_base_bed}" \\
-      | bedtools intersect -a - -b bins_nochr_sorted.bed -sorted \\
-      | awk 'BEGIN{OFS="\\t"} {print \$1, \$2+1, \$3, \$4}' \\
+      | awk 'BEGIN{OFS="\\t"} {gsub("chr","",\$1); print \$1, \$2, \$4}' \\
       | gzip > ${sample}_${assay}_coverage.tsv.gz
     """
 

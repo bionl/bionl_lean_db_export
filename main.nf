@@ -55,5 +55,5 @@ workflow {
     MOSDEPTH_PERBASE(ch_bam_input, ch_bins_bed)
 
     // ── Step 3: Intersect to BED intervals and format for BigQuery ───────────
-    PERBASE_TO_COVERAGE(MOSDEPTH_PERBASE.out.per_base_bed, ch_bins_bed)
+    PERBASE_TO_COVERAGE(MOSDEPTH_PERBASE.out.per_base_bed)
 }
