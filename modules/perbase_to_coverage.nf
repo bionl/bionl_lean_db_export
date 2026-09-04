@@ -32,9 +32,9 @@ process PERBASE_TO_COVERAGE {
     def sample = meta.sample
     def assay  = meta.assay
     """
-    sort -k1,1V -k2,2n "${bins_bed}" | sed 's/^chr//' > bins_nochr_sorted.bed
+    sed 's/^chr//' "${bins_bed}" > bins_nochr.bed
     gzip -dc "${per_base_bed}" \\
-      | bedtools intersect -a - -b bins_nochr_sorted.bed -sorted \\
+      | bedtools intersect -a - -b bins_nochr.bed \\
       | awk 'BEGIN{OFS="\\t"} {print \$1, \$2, \$4}' \\
       | gzip > ${sample}_${assay}_coverage.tsv.gz
     """
