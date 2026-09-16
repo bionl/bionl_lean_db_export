@@ -8,7 +8,8 @@
 //  Endpoint base: params.variants_db_url (the bionl launcher sets it in the
 //                 config it attaches to every run; leave the default at null)
 //  Auth: a Google identity token the task VM mints for that URL through its
-//        metadata server, sent as Authorization: Bearer. Nothing is stored in
+//        metadata server, sent in the X-Bionl-Identity header (not
+//        Authorization: Cloud Run strips the signature there). Nothing is stored in
 //        the work dir or logs. Nextflow's `secret` directive is NOT used: it
 //        only works on local and grid executors, on Google Batch the task has
 //        no access to the launcher's secret store and the variable is unbound.
@@ -44,7 +45,7 @@ process INGEST_WAREHOUSE {
             "\$uri" "${sample}" "${assay}" "${sex}" "${workflow.runName}")
         code=\$(curl -s -o "\$kind.json" -w '%{http_code}' -X POST \\
             "\$base/variants-db/ingestion/\$kind" \\
-            -H "Authorization: Bearer \$token" \\
+            -H "X-Bionl-Identity: \$token" \\
             -H 'content-type: application/json' \\
             -d "\$body")
         case "\$code" in
