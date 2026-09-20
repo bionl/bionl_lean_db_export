@@ -33,7 +33,7 @@ process INGEST_WAREHOUSE {
     fi
 
     token=\$(curl -sf -H 'Metadata-Flavor: Google' \\
-        "http://169.254.169.254/computeMetadata/v1/instance/service-accounts/default/identity?audience=\$base")
+        "http://169.254.169.254/computeMetadata/v1/instance/service-accounts/default/identity?audience=\$base&format=full")
     if [ -z "\$token" ]; then
         echo "could not obtain an identity token for \$base from the metadata server"; exit 1
     fi
