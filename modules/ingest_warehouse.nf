@@ -8,7 +8,8 @@
 //  Endpoint base: params.variants_db_url (the bionl launcher sets it in the
 //                 config it attaches to every run; leave the default at null)
 //  Auth: a Google identity token the task VM mints for that URL through its
-//        metadata server, sent twice: as Authorization: Bearer for Cloud Run's
+//        metadata server (format=full so it carries the service account
+//        email the warehouse allowlists), sent twice: as Authorization: Bearer for Cloud Run's
 //        own IAM gate (the warehouse does not allow unauthenticated calls),
 //        and in X-Bionl-Identity for the warehouse itself, because Cloud Run
 //        strips the signature from the Authorization copy. Nothing is stored in
@@ -35,7 +36,7 @@ process INGEST_WAREHOUSE {
     fi
 
     token=\$(curl -sf -H 'Metadata-Flavor: Google' \\
-        "http://169.254.169.254/computeMetadata/v1/instance/service-accounts/default/identity?audience=\$base")
+        "http://169.254.169.254/computeMetadata/v1/instance/service-accounts/default/identity?audience=\$base&format=full")
     if [ -z "\$token" ]; then
         echo "could not obtain an identity token for \$base from the metadata server"; exit 1
     fi
