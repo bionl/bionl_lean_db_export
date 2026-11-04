@@ -10,7 +10,7 @@ params.outdir      = params.outdir      ?: "${workflow.projectDir}/results"
 params.script_dir  = params.script_dir  ?: "${workflow.projectDir}/bins"
 
 // Target regions BED (protein-coding gene bodies, 200 bp bins)
-params.bins_bed    = params.bins_bed    ?: "${workflow.projectDir}/data/MANE_bins_unique_exon.bed"
+params.bins_bed    = params.bins_bed    ?: "gs://vep-data-vaic/db_export_bins/protein_coding_genes_200bp_bins.bed"
 
 // ─────────────────────────────────────────────
 //  Module imports
