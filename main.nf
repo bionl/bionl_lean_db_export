@@ -25,13 +25,6 @@ include { INGEST_WAREHOUSE    } from './modules/ingest_warehouse'
 // ─────────────────────────────────────────────
 workflow {
 
-    if (!file(params.samplesheet).exists()) {
-        error "Samplesheet not found: ${params.samplesheet}"
-    }
-    if (!file(params.bins_bed).exists()) {
-        error "BED file not found: ${params.bins_bed}"
-    }
-
     ch_bins_bed = Channel.value(file(params.bins_bed, checkIfExists: true))
 
     // ── Parse samplesheet ─────────────────────────────────────────────────────
